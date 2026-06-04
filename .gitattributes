@@ -1,2 +1,668 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PI Lab — Private Maths Tutoring | IGCSE, A Level, Competition & University</title>
+  <!-- Google Fonts + Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fefcf8;
+      color: #0f2a3f;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+    }
+
+    :root {
+      --primary: #2c5f8a;
+      --primary-dark: #1f4463;
+      --gold: #d99e3e;
+      --gold-dark: #b87a2a;
+      --navy: #0a1c2c;
+      --slate: #2c4b66;
+      --sand-light: #fef8ef;
+      --white: #ffffff;
+      --grey-soft: #f2efe9;
+      --shadow-sm: 0 12px 30px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+      --radius-sm: 18px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 252, 245, 0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(153, 102, 34, 0.2);
+      padding: 14px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--slate);
+      transition: 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .btn-cta {
+      background: var(--gold);
+      color: white;
+      padding: 8px 22px;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-cta:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 12px 32px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(44, 95, 138, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: var(--gold);
+      color: white;
+    }
+
+    /* hero */
+    .hero {
+      padding: 70px 0 60px;
+      background: linear-gradient(135deg, #fffaf0 0%, #fef4e6 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(153, 102, 34, 0.12);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .hero-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: #3a5a72;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 32px;
+    }
+
+    .stat-item h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Profile Card with Photo */
+    .hero-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      text-align: center;
+    }
+
+    .profile-photo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      display: block;
+      border: 4px solid var(--gold);
+      box-shadow: var(--shadow-sm);
+      background: #e9e2d8;
+    }
+
+    .profile-photo-placeholder {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #d4dce4 0%, #bdc8d4 100%);
+      border: 4px solid var(--gold);
+      box-shadow: var(--shadow-sm);
+      font-size: 3rem;
+      color: var(--primary);
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      color: #5e7e9a;
+      max-width: 680px;
+      margin-bottom: 48px;
+      font-size: 1.05rem;
+    }
+
+    .gold-accent {
+      width: 70px;
+      height: 3px;
+      background: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    /* services (math only) */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      padding: 32px 28px;
+      transition: 0.25s;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #e8dfd3;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
+    }
+
+    .service-icon {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 18px;
+    }
+
+    /* university destinations */
+    .uni-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 22px;
+      margin: 40px 0;
+    }
+
+    .uni-item {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 12px;
+      text-align: center;
+      transition: 0.2s;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e5dcd1;
+    }
+
+    .uni-item i {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 28px;
+    }
+
+    .testimonial {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stars {
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .flex-video-cv {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 20px;
+    }
+
+    .video-preview {
+      background: #e7dfd3;
+      border-radius: 28px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .cv-card {
+      background: var(--primary-dark);
+      border-radius: 28px;
+      padding: 28px;
+      color: white;
+      text-align: center;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(153, 102, 34, 0.12);
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+    }
+
+    footer {
+      background: #0a1c2c;
+      color: #cddfe7;
+      padding: 48px 0 24px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 880px) {
+      .hero-grid, .contact-grid, .flex-video-cv {
+        grid-template-columns: 1fr;
+      }
+      .nav-container {
+        flex-direction: column;
+      }
+      .hero-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 20px;
+      border: 1px solid #ddd6cc;
+      background: white;
+      font-family: 'Inter', sans-serif;
+      margin-top: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    /* upload hint */
+    .photo-hint {
+      font-size: 0.7rem;
+      color: #7f8c8d;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-container">
+    <div class="logo">PI <span>Lab</span></div>
+    <ul class="nav-links">
+      <li><a href="#services">Curriculum</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#video-cv" class="btn-cta">Resources</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero Section with Profile Picture -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge">✦ Precision Maths Tutoring</div>
+      <h1 class="hero-title">Where <em>precision</em> meets <br>ambition.</h1>
+      <p class="hero-desc">
+        Expert one-to-one and small-group tutoring for <strong>IGCSE, A Level, University Maths & Competition Mathematics</strong>. Structured curriculum, real past papers problem, and a proven record of results — now at PI Lab.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item"><h3>350+</h3><span>Tutoring Hours</span></div>
+        <div class="stat-item"><h3>10+</h3><span>Students</span></div>
+        <div class="stat-item"><h3>280+</h3><span>Lesson Delivered</span></div>
+      </div>
+      <div style="margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap;">
+        <a href="#contact" class="btn-primary">Book a session</a>
+        <a href="#video-cv" class="btn-outline">Watch Introductory Video</a>
+      </div>
+    </div>
+    <div class="hero-card"> 
+      <!-- Profile Photo Area - Replace 'profile-placeholder.jpg' with your actual image URL -->
+      <img src="https://drive.google.com/uc?export=view&id=1u1RCeZqCvK2VmwrZPjMKe9IzyEUOCAp6" class="profile-photo" id="tutorPhoto">
+      <p class="photo-hint"><i class="fas fa-upload"></i> Replace image URL above (src attribute) with your actual photo</p>
+      <h3 style="font-size: 1.6rem; margin-top: 8px;">Chua Zhi Yu</h3>
+      <p style="margin: 12px 0;">UCL Mathematics · KMC Gold Medalist · A-Level - 5A* </p>
+      <hr style="margin: 20px 0; opacity: 0.2;">
+      <p><i class="fas fa-globe"></i> Lesson: Online · IGCSE / A-Level / University / Competition</p>
+      <p><i class="fas fa-clock"></i> 60–90 min deep-dive lessons</p>
+      <p><i class="fas fa-calculator"></i> Pure, Applied, Analysis & Algebra</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES COVERAGE -->
+<section id="services">
+  <div class="container">
+    <div class="gold-accent"></div>
+    <h2 class="section-title">Complete <em>mathematics</em> ecosystem</h2>
+    <p class="section-subtitle">IGCSE · A Level · Competition Maths · University-level foundations — structured for deep understanding and exam success.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-square-root-alt"></i></div>
+        <h3>IGCSE / GCSE Maths</h3>
+        <p>Core & extended syllabus, problem-solving techniques, past paper drills. Build unshakeable fundamentals for further studies.</p>
+        <p style="margin-top: 12px;"><strong>Focus:</strong> Number, algebra, geometry, statistics.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>A Level Mathematics & Further Maths</h3>
+        <p>Pure maths, mechanics, statistics. Advanced topics like complex numbers, matrices, differential equations. Exam-board tailored (Edexcel, CAIE, OCR, etc.)</p>
+        <p style="margin-top: 12px;"><strong>Typical improvement:</strong> 2+ grades.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-trophy"></i></div>
+        <h3>Competition Maths (AMC / Kangaroo / Olympiad)</h3>
+        <p>Number theory, combinatorics, geometry shortcuts, and proof techniques. Past AMC 10/12, UKMT, and Kangaroo problems solved live.</p>
+        <p><strong>Gold award track</strong> · Top percentile strategies.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-university"></i></div>
+        <h3>University Maths Preparation (TMUA)</h3>
+        <p>Bridge to higher mathematics: real analysis, linear algebra, calculus foundations. Ideal for students preparing for maths/econ/engineering degrees.</p>
+        <p><strong>Support:</strong> Rigorous Concept Reasoning + Problem sets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSITY DESTINATIONS -->
+<section id="destinations">
+  <div class="container">
+    <div class="gold-accent"></div>
+    <h2 class="section-title">Where our students <em>excel next</em></h2>
+    <p class="section-subtitle">PI Lab alumni have entered top-tier business management, engineering, and data science programmes worldwide — built on rigorous maths training.</p>
+    <div class="uni-grid">
+      <div class="uni-item"><i class="fas fa-university"></i><strong>University of Oxford</strong><br>Philosophy, Politics, and Economics</div>
+      <div class="uni-item"><i class="fas fa-university"></i><strong>University of Amsterdam</strong><br>Geography</div>
+      <div class="uni-item"><i class="fas fa-university"></i><strong>HKUST</strong><br>Business Management</div>
+      <div class="uni-item"><i class="fas fa-university"></i><strong>University of Melbourne</strong><br>Data Science</div>
+    </div>
+    <p style="background: #e9e2d8; padding: 10px 18px; border-radius: 60px; display: inline-block;"><i class="fas fa-chart-simple"></i> 74% of regular tutees improved their exam scores by at least one band within 3 months.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="background: #ffffff;">
+  <div class="container">
+    <div class="gold-accent"></div>
+    <h2 class="section-title">Trusted by <em>students & parents</em></h2>
+    <p class="section-subtitle">Real results from IGCSE, A-Level and competition students.</p>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 5.0</div>
+        <p><i class="fas fa-quote-left" style="color: var(--gold); opacity: 0.6;"></i> Nathanael made a grade 9! 95% Thank you so much for all your help. PI Lab transformed my relationship with maths.</p>
+        <p style="margin-top: 20px;"><strong>— IGCSE student, now at A-Level</strong></p>
+      </div>
+      <div class="testimonial">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 5.0</div>
+        <p>Overall, the students and parents were really impressed by your slides and your “explain while writing” style — it was very clear and also makes it easy for them to understand and review after class. They thought it was excellent.</p>
+        <p style="margin-top: 20px;"><strong>— Parents, AMC Student</strong></p>
+      </div>
+      <div class="testimonial">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 5.0</div>
+        <p>Hi Zhi Yu, thanks so much for taking your time to help my daughter, she really learnt a lot and said she had learnt more in an hour than in the past 3 weeks. As far as I'm concerned your teaching seems great.</p>
+        <p style="margin-top: 20px;"><strong>— Parent, IGCSE student</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO + CV DOWNLOAD -->
+<section id="video-cv">
+  <div class="container">
+    <div class="gold-accent"></div>
+    <h2 class="section-title">Lesson preview & <em>tutor CV</em></h2>
+    <p class="section-subtitle">Watch a quick introduction or download my credentials.</p>
+    <div class="flex-video-cv">
+      <div class="video-preview">
+        <i class="fas fa-play-circle" style="font-size: 3rem; color: var(--primary); margin-bottom: 16px;"></i>
+        <h3 style="margin-bottom: 12px;">Tutor Introduction: Maths Tutoring</h3>
+        <p style="margin-bottom: 18px;">Supporting Your Growth - Mathematics</p>
+        <div style="background: #1e2f3f; border-radius: 20px; padding: 12px; color: white;">
+          <iframe width="100%" height="180" src="https://www.youtube.com/embed/8A3gmw_9sE8?si=Pe2r44Y8AnVWQdsY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border-radius: 16px;"></iframe>
+        </div>
+        <p style="margin-top: 12px; font-size: 0.8rem;">✨ Representative tutorial — full access available upon enrolment.</p>
+      </div>
+      <div class="cv-card">
+        <i class="fas fa-file-pdf" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--gold);"></i>
+        <h3 style="color: white;">Tutor CV & Portfolio</h3>
+        <p style="margin: 14px 0;">5A* A-Level, UCL Mathematics Undergraduate, Full Scholarship holder. Teaching methodology and Student Results Included.</p>
+        <a href="#" id="downloadCvBtnMath" class="btn-primary" style="background: var(--gold); margin-top: 12px; display: inline-block;">📄 Download CV (PDF)</a>
+        <p style="margin-top: 18px; font-size: 0.8rem;"><i class="fas fa-check-circle"></i> Verified tutoring experience | 350+ hours taught</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT + DETAILS -->
+<section id="contact">
+  <div class="container">
+    <div class="gold-accent"></div>
+    <h2 class="section-title">Get in touch — <em>start your journey</em></h2>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div><strong>Email (preferred)</strong><br>zhiyu2003.prep@gmail.com</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+          <div><strong>WhatsApp / Call</strong><br>(+44) 07887 004980</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fas fa-video"></i></div>
+          <div><strong>Online sessions</strong><br>Zoom / Google Meet</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fas fa-language"></i></div>
+          <div><strong>Languages</strong><br>English, Chinese, Malay</div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon"><i class="fas fa-map-pin"></i></div>
+          <div><strong>Time zones</strong><br>MYT (UTC+8) · GMT (UTC+1)</div>
+        </div>
+      </div>
+      <div>
+        <form id="contactFormNew">
+          <div class="form-group"><label>Full name *</label><input type="text" id="studentName" required placeholder="e.g., Aiman / Jia Wei"></div>
+          <div class="form-group"><label>Email / WhatsApp *</label><input type="email" id="studentEmail" placeholder="your@email.com / +60..."></div>
+          <div class="form-group"><label>Course interest</label><select id="courseSelect"><option>IGCSE Maths</option><option>A Level Maths / Further Maths</option><option>Competition Maths (AMC/Kangaroo/Olympiad)</option><option>University Maths Preparation</option><option>Combined programme</option></select></div>
+          <div class="form-group"><label>Preferred schedule / message</label><textarea rows="3" id="studentMsg" placeholder="Let me know your target exam, current level, or available slots."></textarea></div>
+          <button type="button" id="submitEnquiryBtn" class="btn-primary" style="width:100%;">Request consultation →</button>
+          <p style="margin-top: 12px; font-size: 0.75rem;">Free 20-min introductory chat to assess your maths level & goals.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+      <div><strong>PI Lab — Private Maths Tutoring</strong><br>Chua Zhi Yu | UCL Mathematics<br>© 2025 — All rights reserved</div>
+      <div><i class="fas fa-calculator"></i> IGCSE | A Level | Competition | University<br><i class="fas fa-medal"></i> Gold award coach & top scorer</div>
+    </div>
+    <hr style="margin: 32px 0 20px; opacity: 0.3;">
+    <div style="text-align: center; font-size: 0.8rem;">📍 Structured curriculum | Real problem sets | Proven exam techniques</div>
+  </div>
+</footer>
+
+<script>
+  // CV download simulation
+  document.getElementById('downloadCvBtnMath')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert("📄 Tutor CV download: Includes 5A* A-Level results, UCL Maths degree, competition awards, and teaching methodology. (Demo — production PDF link would be attached)");
+  });
+
+  // contact form handler
+  document.getElementById('submitEnquiryBtn')?.addEventListener('click', () => {
+    const name = document.getElementById('studentName')?.value.trim();
+    if (!name) {
+      alert("Please tell me your name so I can assist you better.");
+      return;
+    }
+    alert(`✨ Thanks ${name}! Zhi Yu will reach out within 24h to arrange a free consultation. WhatsApp: +44 07887 004980 for urgent scheduling.`);
+    document.getElementById('contactFormNew')?.reset();
+  });
+
+  // smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === "#" || targetId === "") return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Optional: replace photo dynamically if you want to allow upload (just a hint)
+  console.log("To replace photo, edit the 'src' attribute of .profile-photo with your image URL.");
+</script>
+</body>
+</html>
